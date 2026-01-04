@@ -4,15 +4,18 @@ import org.example.amoeba.tabla.Tabla;
 import org.example.amoeba.vos.JatekosJel;
 import org.example.amoeba.tabla.Pozicio;
 
+import java.util.Scanner;
+
 
 public class Ember implements Jatekos{
 
     private final String nev;
     private final JatekosJel jel;
+    private final Scanner sc = new Scanner(System.in);
 
-    public Ember(String nev, JatekosJel jel) {
+    public Ember(String nev) {
         this.nev = nev;
-        this.jel = jel;
+        this.jel = JatekosJel.X;
     }
 
     @Override

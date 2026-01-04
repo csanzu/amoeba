@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Gep implements Jatekos {
-    private final JatekosJel jel;
+    private final JatekosJel jel = JatekosJel.O;
+    private final String nev = "Gép";
     private final Random rand = new Random();
 
-    public Gep(JatekosJel jel) {
-        this.jel = jel;
-    }
 
     @Override
     public JatekosJel jel() {

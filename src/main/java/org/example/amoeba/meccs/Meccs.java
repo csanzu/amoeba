@@ -27,6 +27,12 @@ public class Meccs {
     }
 
     public Meccs() {
+
+        String nev = nevBeker();
+        this.ember = new Ember(nev);
+        this.gep = new Gep();
+
+
         while (true) {
 
             System.out.println();
@@ -34,7 +40,7 @@ public class Meccs {
             System.out.println("Mekkora tablan szeretnel jatszani?: ");
 
             int szelesseg = bekerMeret("Szelesseg (4-25): ");
-            int magassag = bekerMeret("Magassag (2-25): ");
+            int magassag = bekerMeret("Magassag (4-25): ");
 
             try {
                 this.meret = new TablaMeret(szelesseg, magassag);
@@ -70,6 +76,22 @@ public class Meccs {
         }
     }
 //TÁBLAMÉRET BEOLVASÁS VÉGE
+
+//JÁTÉKOS NÉV BEKÉRÉS
+private String nevBeker() {
+    while (true) {
+        System.out.print("Add meg a neved: ");
+        String nev = sc.nextLine().trim();
+
+        if (nev.isEmpty()) {
+            System.out.println("A név nem lehet üres!");
+            continue;
+        }
+
+        return nev;
+    }
+}
+//JÁTÉKOS NÉV BEKÉRÉS VÉGE
 
     public void start() {
 
