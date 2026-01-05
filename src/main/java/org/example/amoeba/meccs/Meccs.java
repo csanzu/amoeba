@@ -1,6 +1,5 @@
 package org.example.amoeba.meccs;
 
-import org.example.amoeba.DB.*;
 import org.example.amoeba.jatekos.*;
 import org.example.amoeba.tabla.*;
 import org.example.amoeba.vos.*;
@@ -32,7 +31,6 @@ public class Meccs {
         this.ember = new Ember(nev);
         this.gep = new Gep();
 
-
         while (true) {
 
             System.out.println();
@@ -52,7 +50,10 @@ public class Meccs {
             break;
         }
         this.tabla = new Tabla(this.meret);
+        //Pozicio kezdo = kozepPozicio();
+        //tabla.Lerak(kezdo, JatekosJel.X);
         rajzolo.rajzolo(tabla);
+        this.aktualis = ember;
 
     }
 
@@ -93,9 +94,63 @@ private String nevBeker() {
 }
 //JÁTÉKOS NÉV BEKÉRÉS VÉGE
 
-    public void start() {
 
-
-
+//KEZDŐ POZÍCIÓRA x HELYEZÉS
+    private Pozicio kozepPozicio() {
+        int sor = (meret.getMagassag() + 1) / 2;
+        int oszlop = (meret.getSzelesseg() + 1) / 2;
+        return new Pozicio(sor, oszlop);
     }
+//KEZDŐRE HELYEZÉS VÉGE
+
+//NYERÉSI HOSSZ
+    private int nyeresiHossz() {
+        int max = Math.max(
+            meret.getSzelesseg(),
+            meret.getMagassag()
+        );
+
+    return (max > 4) ? 5 : 4;
+}
+//NYERÉSI HOSSZ VÉGE
+
+
+//JÁTÉK START
+    public void start() {
+        System.out.println("UGABUGAAAAAAAAAA");
+
+        Pozicio kezdo = kozepPozicio();
+        tabla.Lerak(kezdo, JatekosJel.X);
+        aktualis = gep;
+        int nyeresiSzam = nyeresiHossz();
+
+        CheckWin check = new CheckWin(tabla, nyeresiSzam);
+
+        while (true) {
+            rajzolo.rajzolo(tabla);
+
+            System.out.println("A kovetkezo lep: " + aktualis.getNev()
+                    + " (" + aktualis.getJel() + ")");
+
+            Pozicio lepes = aktualis.lep(tabla);
+
+            tabla.Lerak(lepes, aktualis.getJel());
+
+            JatekosJel nyertes = check.ellenoriz();
+            if (nyertes != null) {
+                rajzolo.rajzolo(tabla);
+                System.out.println("A gyoztes: " + (nyertes == JatekosJel.X ? ember.getNev() : gep.getNev()));
+                break;
+            }
+
+            if (check.döntetlen()) {
+                rajzolo.rajzolo(tabla);
+                System.out.println("Dontetlen!");
+                break;
+            }
+
+            aktualis = (aktualis == ember) ? gep : ember;
+        }
+    }
+    //JÁTÉK START VÉGE
 }

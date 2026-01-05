@@ -1,6 +1,7 @@
 package org.example.amoeba.tabla;
 
 import org.example.amoeba.vos.JatekosJel;
+import org.example.amoeba.vos.Pozicio;
 
 public class Rajzolo {
 

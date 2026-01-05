@@ -1,9 +1,11 @@
 package org.example.amoeba.jatekos;
 
+import org.example.amoeba.meccs.Lepes;
 import org.example.amoeba.tabla.Tabla;
 import org.example.amoeba.vos.JatekosJel;
-import org.example.amoeba.tabla.Pozicio;
+import org.example.amoeba.vos.Pozicio;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,24 +16,35 @@ public class Gep implements Jatekos {
 
 
     @Override
-    public JatekosJel jel() {
+    public JatekosJel getJel() {
         return jel;
     }
+
     @Override
     public String getNev() {
         return "Gép";
     }
 
+    /**
+     * @Override public Pozicio lep(Tabla tabla) {
+     * return null;
+     * }
+     **/
     @Override
     public Pozicio lep(Tabla tabla) {
-        return null;
-    }
-
-    public Pozicio lerakGep(Tabla tabla) {
-        List<Pozicio> szabad = tabla.getSzabadPoziciok();
-        if (szabad.isEmpty()) {
-            return null;
+        List<Pozicio> lehetosegek = new ArrayList<>();
+        for (Pozicio p : tabla.getSzabadPoziciok()) {
+            Lepes lepes = new Lepes(p, this.getJel());
+            if (lepes.ervenyes(tabla)) lehetosegek.add(p);
         }
-        return szabad.get(rand.nextInt(szabad.size()));
+
+        if (lehetosegek.isEmpty()) {
+            // még nincs szomszédos mező
+            lehetosegek = tabla.getSzabadPoziciok();
+        }
+
+        int index = rand.nextInt(lehetosegek.size());
+        Pozicio valasztott = lehetosegek.get(index);
+        return valasztott;
     }
 }
