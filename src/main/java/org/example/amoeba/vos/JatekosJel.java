@@ -7,12 +7,7 @@ public enum JatekosJel {
     }
 
 //enumnál amúgy nem kell toString, az alap is a name()-et adja vissza ami a konstans neve
-/**
-    @Override
-    public String toString() {
-        return name();
-    }
- **/
+
 }
 
 

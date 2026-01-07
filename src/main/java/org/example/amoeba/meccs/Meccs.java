@@ -1,5 +1,6 @@
 package org.example.amoeba.meccs;
 
+import org.example.amoeba.DB.*;
 import org.example.amoeba.jatekos.*;
 import org.example.amoeba.tabla.*;
 import org.example.amoeba.vos.*;
@@ -10,6 +11,7 @@ public class Meccs {
 
     Scanner sc = new Scanner(System.in);
 
+    private final GameSL gameSL;
     private Tabla tabla;
     private Jatekos ember;
     private Jatekos gep;
@@ -18,44 +20,16 @@ public class Meccs {
 
     Rajzolo rajzolo = new Rajzolo();
 
-    public Meccs(Tabla tabla, Jatekos ember, Jatekos gep, Jatekos aktualis) {
-        this.tabla = tabla;
-        this.ember = ember;
-        this.gep = gep;
-        this.aktualis = aktualis;
+    public Meccs(GameSL gameSL) {
+        this.gameSL = gameSL;
     }
 
-    public Meccs() {
+    public Meccs(JatekAllapot allapot, GameSL gameSL) {
 
-        String nev = nevBeker();
-        this.ember = new Ember(nev);
-        this.gep = new Gep();
-
-        while (true) {
-
-            System.out.println();
-            System.out.println("     min: 4x4 | max: 25x25");
-            System.out.println("Mekkora tablan szeretnel jatszani?: ");
-
-            int szelesseg = bekerMeret("Szelesseg (4-25): ");
-            int magassag = bekerMeret("Magassag (4-25): ");
-
-            try {
-                this.meret = new TablaMeret(szelesseg, magassag);
-            }
-            catch (IllegalArgumentException e) {
-                System.out.println("HIBA: " + e.getMessage());
-                continue;
-            }
-            break;
-        }
-        this.tabla = new Tabla(this.meret);
-        //Pozicio kezdo = kozepPozicio();
-        //tabla.Lerak(kezdo, JatekosJel.X);
-        rajzolo.rajzolo(tabla);
-        this.aktualis = ember;
-
+        this.gameSL = gameSL;
+        betolt(allapot);
     }
+
 
 //TÁBLA MÉRET BEOLVASÁS
     private int bekerMeret(String uzenet){
@@ -79,7 +53,7 @@ public class Meccs {
 //TÁBLAMÉRET BEOLVASÁS VÉGE
 
 //JÁTÉKOS NÉV BEKÉRÉS
-private String nevBeker() {
+    private String nevBeker() {
     while (true) {
         System.out.print("Add meg a neved: ");
         String nev = sc.nextLine().trim();
@@ -114,36 +88,79 @@ private String nevBeker() {
 }
 //NYERÉSI HOSSZ VÉGE
 
+//ÁLLAPOT EXPORT
+    public JatekAllapot exportAllapot() {
+    return new JatekAllapot(
+            tabla.getMeret(),
+            tabla.getOsszesLepes(),
+            ember.getNev(),
+            aktualis.getJel()
+    );
+}
+//ÁLLAPOT EXPORT VÉGE
+
+//JÁTÉK BETÖLTÉS
+    private void betolt(JatekAllapot allapot) {
+    this.meret = allapot.getMeret();
+    this.tabla = new Tabla(meret);
+
+    for (var e : allapot.getLepesek().entrySet()) {
+        tabla.Lerak(e.getKey(), e.getValue());
+    }
+
+    this.ember = new Ember(allapot.getEmberNev());
+    this.gep = new Gep();
+
+    this.aktualis =
+            allapot.getAktualisJel() == ember.getJel()
+                    ? ember
+                    : gep;
+}
+//JÁTÉK BETÖLTÉS VÉGE
 
 //JÁTÉK START
     public void start() {
-        System.out.println("UGABUGAAAAAAAAAA");
 
-        Pozicio kezdo = kozepPozicio();
-        tabla.Lerak(kezdo, JatekosJel.X);
-        aktualis = gep;
+        if (tabla == null) {
+            ujJatek();
+        }
+
         int nyeresiSzam = nyeresiHossz();
-
         CheckWin check = new CheckWin(tabla, nyeresiSzam);
 
         while (true) {
             rajzolo.rajzolo(tabla);
 
-            System.out.println("A kovetkezo lep: " + aktualis.getNev()
-                    + " (" + aktualis.getJel() + ")");
+            System.out.println("A kovetkezo lep: "
+                + aktualis.getNev()
+                + " (" + aktualis.getJel() + ")");
 
             Pozicio lepes = aktualis.lep(tabla);
+            if (lepes == null) {
+                gameSL.save(exportAllapot());
+                return;
+            }
 
             tabla.Lerak(lepes, aktualis.getJel());
 
             JatekosJel nyertes = check.ellenoriz();
             if (nyertes != null) {
                 rajzolo.rajzolo(tabla);
-                System.out.println("A gyoztes: " + (nyertes == JatekosJel.X ? ember.getNev() : gep.getNev()));
+                System.out.println("A gyoztes: "
+                    + (nyertes == JatekosJel.X ? ember.getNev() : gep.getNev()));
+
+                StatsSL.ment(
+                        nyertes == JatekosJel.X ? ember.getNev() : gep.getNev(),
+                        meret.getSzelesseg(),
+                        meret.getMagassag(),
+                        nyertes == JatekosJel.X ? ember.getNev() : gep.getNev(),
+                        tabla.getOsszesLepes().size()
+                );
+
                 break;
             }
 
-            if (check.döntetlen()) {
+            if (check.dontetlen()) {
                 rajzolo.rajzolo(tabla);
                 System.out.println("Dontetlen!");
                 break;
@@ -152,5 +169,33 @@ private String nevBeker() {
             aktualis = (aktualis == ember) ? gep : ember;
         }
     }
-    //JÁTÉK START VÉGE
+//JÁTÉK START VÉGE
+
+    private void ujJatek() {
+
+        String nev = nevBeker();
+        this.ember = new Ember(nev);
+        this.gep = new Gep();
+
+        while (true) {
+            int sz = bekerMeret("Szelesseg (4-25): ");
+            int m = bekerMeret("Magassag (4-25): ");
+
+            try {
+                this.meret = new TablaMeret(sz, m);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        this.tabla = new Tabla(meret);
+
+        Pozicio kezdo = kozepPozicio();
+        tabla.Lerak(kezdo, JatekosJel.X);
+
+        this.aktualis = gep;
+    }
+
+
 }

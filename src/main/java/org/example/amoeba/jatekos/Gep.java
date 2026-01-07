@@ -38,8 +38,7 @@ public class Gep implements Jatekos {
             if (lepes.ervenyes(tabla)) lehetosegek.add(p);
         }
 
-        if (lehetosegek.isEmpty()) {
-            // még nincs szomszédos mező
+        if (lehetosegek.isEmpty()) {                    // még nincs szomszédos mező
             lehetosegek = tabla.getSzabadPoziciok();
         }
 

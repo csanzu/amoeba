@@ -5,7 +5,9 @@ import org.example.amoeba.vos.TablaMeret;
 import org.example.amoeba.vos.JatekosJel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Tabla {
 
@@ -73,16 +75,16 @@ public class Tabla {
         }
         cella[pozicio.getSor()-1][pozicio.getOszlop()-1] = jel;
     }
-
-
-/**    public List<Pozicio> getSzabadSzomszedosPoziciok(JatekosJel jel) {
-        List<Pozicio> lehetosegek = new ArrayList<>();
-        for (Pozicio p : getSzabadPoziciok()) {
-            if (vanSzomszedosSajatJel(p, jel)) {
-                lehetosegek.add(p);
+    public Map<Pozicio, JatekosJel> getOsszesLepes() {
+        Map<Pozicio, JatekosJel> map = new HashMap<>();
+        for (int s = 1; s <= meret.getMagassag(); s++) {
+            for (int o = 1; o <= meret.getSzelesseg(); o++) {
+                if (cella[s-1][o-1] != null) {
+                    map.put(new Pozicio(s, o), cella[s-1][o-1]);
+                }
             }
         }
-        return lehetosegek;
-    }*/
+        return map;
+    }
 
 }

@@ -2,14 +2,22 @@ package org.example;
 
 import org.example.amoeba.DB.*;
 import org.example.amoeba.meccs.Meccs;
+import org.example.amoeba.meccs.JatekAllapot;
 import org.example.amoeba.tabella.Stats;
+import org.example.amoeba.tabella.Tabella;
 
+import java.util.List;
 import java.util.Scanner;
+
 
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
+        DBConnectInit.init();
+        GameSL gameSL = new GameSL();
+
 
         int option = -1;
 
@@ -47,12 +55,11 @@ public class Main {
             switch(option){
 
                 case 1:
-                    System.out.println("Mentett jatek betoltese");
-                    GameSL.GameLoad();
+                    MentettJatekokMenu.menu();
                     break;
                 case 2:
                     System.out.println("Uj Jatek");
-                    Meccs meccs = new Meccs();
+                    Meccs meccs = new Meccs(gameSL);
                     meccs.start();
                     break;
                 case 3:
@@ -69,4 +76,5 @@ public class Main {
         }
 
     }
+
 }

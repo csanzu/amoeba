@@ -43,7 +43,7 @@ public class Ember implements Jatekos{
 
                 if (input.equals("M")) {
                     System.out.println("Mentes..");
-                    continue;
+                    return null;
                 }
 
                 String[] parts = input.split("\\s+");

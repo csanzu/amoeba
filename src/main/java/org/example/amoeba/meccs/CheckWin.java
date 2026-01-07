@@ -7,14 +7,14 @@ import org.example.amoeba.vos.JatekosJel;
 public class CheckWin {
 
     private final Tabla tabla;
-    private final int nyeresiSzam; // pl. 3 vagy 5 egymás után
+    private final int nyeresiSzam;
 
     public CheckWin(Tabla tabla, int nyeresiSzam) {
         this.tabla = tabla;
         this.nyeresiSzam = nyeresiSzam;
     }
 
-    // Ellenőrzi a győzelmet, null ha nincs nyertes
+    // Ellenőrzi a győzelmet, null ha senki
     public JatekosJel ellenoriz() {
         int magassag = tabla.getMeret().getMagassag();
         int szelesseg = tabla.getMeret().getSzelesseg();
@@ -31,7 +31,7 @@ public class CheckWin {
                 if (ellenorizIrany(p, 1, -1, jel)) return jel; // átló /
             }
         }
-        return null; // nincs győztes
+        return null; // ha nincs győztes
     }
 
     // Ellenőrzi adott irányt
@@ -54,8 +54,8 @@ public class CheckWin {
         return false;
     }
 
-    // Ellenőrzi döntetlent (nincs üres mező)
-    public boolean döntetlen() {
+    // check döntetlen (nincs üres mező)
+    public boolean dontetlen() {
         return tabla.getSzabadPoziciok().isEmpty();
     }
 }
