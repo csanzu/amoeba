@@ -1,15 +1,12 @@
 package org.example;
 
-import org.example.amoeba.DB.*;
-import org.example.amoeba.meccs.Meccs;
-import org.example.amoeba.meccs.JatekAllapot;
-import org.example.amoeba.tabella.Stats;
-import org.example.amoeba.tabella.Tabella;
-
-import java.util.List;
 import java.util.Scanner;
 
-
+import org.example.amoeba.db.DBConnectInit;
+import org.example.amoeba.db.GameSL;
+import org.example.amoeba.db.MentettJatekokMenu;
+import org.example.amoeba.meccs.Meccs;
+import org.example.amoeba.tabella.Stats;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,7 +18,7 @@ public class Main {
 
         int option = -1;
 
-        while(true){
+        while (true) {
 
             System.out.print("\033[H\033[2J");
             System.out.flush();
@@ -41,7 +38,7 @@ public class Main {
             if (!input.matches("\\d+")) {
                 System.out.println("Hiba: csak számot adj meg!");
 
-                try{
+                try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -52,7 +49,7 @@ public class Main {
 
 
             option = Integer.parseInt(input);
-            switch(option){
+            switch (option) {
 
                 case 1:
                     MentettJatekokMenu.menu();
@@ -64,11 +61,12 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("**********Tabella**********");
-                    Stats.TabellaMenu();
+                    Stats.tabellaMenu();
                     break;
                 case 4:
                     System.out.println("Viszlat");
                     System.exit(0);
+                    break;
                 default:
                     System.out.println("Nincs ilyen opcio, a menubol valassz!");
                     break;

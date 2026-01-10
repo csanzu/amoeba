@@ -1,13 +1,13 @@
 package org.example.amoeba.tabella;
 
-import org.example.amoeba.DB.StatsSL;
-
-//import java.util.List;
 import java.util.Scanner;
 
+import org.example.amoeba.db.StatsSL;
+
+//import java.util.List;
 public class Stats {
 
-    public static void TabellaMenu() {
+    public static void tabellaMenu() {
 
         Scanner sc = new Scanner(System.in);
 

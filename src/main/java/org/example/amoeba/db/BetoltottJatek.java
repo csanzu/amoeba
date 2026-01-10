@@ -1,4 +1,4 @@
-package org.example.amoeba.DB;
+package org.example.amoeba.db;
 
 import org.example.amoeba.tabla.Tabla;
 import org.example.amoeba.vos.JatekosJel;

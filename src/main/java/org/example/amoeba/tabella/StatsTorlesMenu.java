@@ -1,7 +1,8 @@
 package org.example.amoeba.tabella;
 
-import org.example.amoeba.DB.StatsSL;
 import java.util.Scanner;
+
+import org.example.amoeba.db.StatsSL;
 
 public class StatsTorlesMenu {
 

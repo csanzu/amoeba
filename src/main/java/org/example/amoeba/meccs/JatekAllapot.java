@@ -1,7 +1,10 @@
 package org.example.amoeba.meccs;
 
-import org.example.amoeba.vos.*;
 import java.util.Map;
+
+import org.example.amoeba.vos.JatekosJel;
+import org.example.amoeba.vos.Pozicio;
+import org.example.amoeba.vos.TablaMeret;
 
 public class JatekAllapot {
 
@@ -22,8 +25,19 @@ public class JatekAllapot {
         this.aktualisJel = aktualisJel;
     }
 
-    public TablaMeret getMeret() { return meret; }
-    public Map<Pozicio, JatekosJel> getLepesek() { return lepesek; }
-    public String getEmberNev() { return emberNev; }
-    public JatekosJel getAktualisJel() { return aktualisJel; }
+    public TablaMeret getMeret() {
+        return meret;
+    }
+
+    public Map<Pozicio, JatekosJel> getLepesek() {
+        return lepesek;
+    }
+
+    public String getEmberNev() {
+        return emberNev;
+    }
+
+    public JatekosJel getAktualisJel() {
+        return aktualisJel;
+    }
 }

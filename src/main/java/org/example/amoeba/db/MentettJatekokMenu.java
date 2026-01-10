@@ -1,13 +1,17 @@
-package org.example.amoeba.DB;
-
-
-import org.example.amoeba.meccs.JatekAllapot;
-import org.example.amoeba.meccs.Meccs;
+package org.example.amoeba.db;
 
 import java.util.List;
 import java.util.Scanner;
 
+import org.example.amoeba.meccs.JatekAllapot;
+import org.example.amoeba.meccs.Meccs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MentettJatekokMenu {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(MentettJatekokMenu.class);
 
     public static void menu() {
         Scanner sc = new Scanner(System.in);
@@ -28,6 +32,7 @@ public class MentettJatekokMenu {
                 case "1":
                     List<SavedGameInfo> saves = gameSL.listSaves();
                     if (saves.isEmpty()) {
+                        log.warn("A mentett játékok listája üres");
                         System.out.println("Nincs mentett jatek!");
                         break;
                     }
@@ -56,7 +61,7 @@ public class MentettJatekokMenu {
                     System.out.print("Opcio: ");
                     String opci = sc.nextLine().trim();
 
-                    if(opci.equals("1")) {
+                    if (opci.equals("1")) {
                         GameSL.listSavedGames();
                         System.out.print("Add meg az exportalando mentes ID-jat: ");
                         int id = Integer.parseInt(sc.nextLine());
@@ -65,11 +70,11 @@ public class MentettJatekokMenu {
                         String file = sc.nextLine().trim();
 
                         GameSL.exportOneToXml(id, file);
-                    } else if(opci.equals("2")) {
+                    } else if (opci.equals("2")) {
                         System.out.print("Fajlnev (pl. all_games.xml): ");
                         String file = sc.nextLine().trim();
 
-                        GameSL.exportAllToXml(file);
+                        GameSL.exportAllToXml(file, "jdbc:sqlite:amoeba.db");
                     } else {
                         System.out.println("Nincs ilyen opcio!");
                     }
